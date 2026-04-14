@@ -117,5 +117,13 @@ class Workshop(models.Model):
 
         super().save(*args, **kwargs)
 
+    @property
+    def is_full(self):
+        return self.available_spots <= 0
+
+    @property
+    def is_bookable(self):
+        return self.is_published and self.status == WorkshopStatusChoices.UPCOMING and self.available_spots > 0
+
     def __str__(self):
         return self.title
