@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5>My Bookings</h5>
+                {% for booking in my_bookings %}
+                    <p>{{ booking.workshop.title }}</p>
+                {% empty %}
+                    <p>No bookings yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5>My Reviews</h5>
+                {% for review in my_reviews %}
+                    <p>{{ review.workshop.title }} - {{ review.rating }}/5</p>
+                {% empty %}
+                    <p>No reviews yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5>My Workshops</h5>
+                {% if is_organizer %}
+                    {% for workshop in my_workshops %}
+                        <p>{{ workshop.title }}</p>
+                    {% empty %}
+                        <p>No workshops yet.</p>
+                    {% endfor %}
+                {% else %}
+                    <p>You are not an organizer.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

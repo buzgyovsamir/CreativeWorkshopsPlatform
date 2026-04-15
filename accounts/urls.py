@@ -1,5 +1,6 @@
 from django.urls import path
 
+from bookings.views import DashboardView
 from .views import RegisterView, AppUserLoginView, AppUserLogoutView, ProfileDetailView, ProfileEditView
 
 urlpatterns = [
@@ -8,4 +9,5 @@ urlpatterns = [
     path('logout/', AppUserLogoutView.as_view(), name='logout'),
     path('profile/<int:pk>/', ProfileDetailView.as_view(), name='profile-details'),
     path('profile/<int:pk>/edit/', ProfileEditView.as_view(), name='profile-edit'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
 ]

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Reviews</h2>
+
+{% if reviews %}
+    <div class="row">
+        {% for review in reviews %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5>{{ review.workshop.title }}</h5>
+                        <p><strong>Author:</strong> {{ review.author.username }}</p>
+                        <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                        <p>{{ review.comment }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No reviews yet.</p>
+{% endif %}
+{% endblock %}

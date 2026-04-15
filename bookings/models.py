@@ -38,11 +38,14 @@ class Booking(models.Model):
         ordering = ['-created_at']
 
     def clean(self):
-        if self.workshop.organizer == self.participant:
-            raise ValidationError('You cannot book your own workshop.')
+        if not self.participant_id or not self.workshop_id:
+            return
 
-        if self.workshop.available_spots <= 0:
-            raise ValidationError('No available spots left for this workshop.')
+        if self.status == BookingStatusChoices.CANCELLED:
+            return
+
+        if self.workshop.organizer_id == self.participant_id:
+            raise ValidationError('You cannot book your own workshop.')
 
         if not self.workshop.is_bookable:
             raise ValidationError('This workshop is not available for booking.')

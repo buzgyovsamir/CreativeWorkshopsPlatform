@@ -22,21 +22,9 @@ class BookingCreateForm(forms.ModelForm):
         }
 
 
-class BookingCancelForm(forms.ModelForm):
-    class Meta:
-        model = Booking
-        fields = ('participant', 'workshop', 'status', 'notes')
-        widgets = {
-            'participant': forms.TextInput(attrs={'class': 'form-control', 'disabled': True}),
-            'workshop': forms.TextInput(attrs={'class': 'form-control', 'disabled': True}),
-            'status': forms.TextInput(attrs={'class': 'form-control', 'disabled': True}),
-            'notes': forms.Textarea(attrs={'class': 'form-control', 'disabled': True, 'rows': 3}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields['participant'].disabled = True
-        self.fields['workshop'].disabled = True
-        self.fields['status'].disabled = True
-        self.fields['notes'].disabled = True
+class BookingCancelForm(forms.Form):
+    confirm = forms.BooleanField(
+        required=True,
+        label='I confirm that I want to cancel this booking.',
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )

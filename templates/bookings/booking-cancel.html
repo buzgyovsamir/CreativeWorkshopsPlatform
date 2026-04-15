@@ -8,9 +8,36 @@
                 <h2 class="mb-4 text-danger">Cancel Booking</h2>
                 <p>Are you sure you want to cancel this booking?</p>
 
+                <ul class="list-group mb-4">
+                    <li class="list-group-item">
+                        <strong>Participant:</strong> {{ booking.participant.username }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Workshop:</strong> {{ booking.workshop.title }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Status:</strong> {{ booking.get_status_display }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Notes:</strong> {{ booking.notes|default:"No notes provided." }}
+                    </li>
+                </ul>
+
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <div class="form-check mb-3">
+                        {{ form.confirm }}
+                        <label class="form-check-label" for="{{ form.confirm.id_for_label }}">
+                            I confirm that I want to cancel this booking.
+                        </label>
+                    </div>
+
+                    {% if form.confirm.errors %}
+                        <div class="text-danger mb-3">
+                            {{ form.confirm.errors }}
+                        </div>
+                    {% endif %}
+
                     <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
                     <a href="{% url 'my-bookings' %}" class="btn btn-outline-secondary">Back</a>
                 </form>

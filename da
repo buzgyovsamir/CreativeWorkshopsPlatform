@@ -1,0 +1,29 @@
+[33mcommit 90cfabd6c7a66c666a76e01721138bcfd95df96e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Samir <buzgyovsamir@gmail.com>
+Date:   Tue Apr 14 16:08:00 2026 +0300
+
+    Implement booking system with participant flow, validations and booking pages
+
+[33mcommit fb4e41f0688cbf752998ecb9038e93a47be8f71a[m
+Author: Samir <buzgyovsamir@gmail.com>
+Date:   Mon Apr 13 11:35:00 2026 +0300
+
+    Build workshop forms, class-based views and public Bootstrap pages
+
+[33mcommit 7b135bd48d2dbdaa206732db83de163637586a06[m
+Author: Samir <buzgyovsamir@gmail.com>
+Date:   Sun Apr 12 18:27:00 2026 +0300
+
+    Add workshop, category and tag models with admin configuration and validations
+
+[33mcommit 94a8ca693f9188382050ca23b8d3b16277c4561e[m
+Author: Samir <buzgyovsamir@gmail.com>
+Date:   Sat Apr 11 12:21:30 2026 +0300
+
+    Implement custom user model, authentication flow and profile management
+
+[33mcommit 6b85022d65a5a9c62052d14dca4c031aa58f4379[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Samir <buzgyovsamir@gmail.com>
+Date:   Fri Apr 10 12:00:00 2026 +0300
+
+    Initial project setup with apps, settings, static, media and environment configuration

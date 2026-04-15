@@ -1,9 +1,9 @@
-from time import timezone
-
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+from django.utils.text import slugify
 
 from workshops.choices import WorkshopStatusChoices
 
@@ -112,6 +112,17 @@ class Workshop(models.Model):
             raise ValidationError('Price cannot be negative.')
 
     def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+
+            while Workshop.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f'{base_slug}-{counter}'
+                counter += 1
+
+            self.slug = slug
+
         if self.available_spots > self.capacity:
             self.available_spots = self.capacity
 

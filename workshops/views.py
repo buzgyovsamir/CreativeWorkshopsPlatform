@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from core.mixins import OrganizerRequiredMixin
 from .forms import WorkshopCreateForm, WorkshopEditForm, WorkshopDeleteForm
 from .models import Workshop
 
@@ -26,20 +27,27 @@ class WorkshopDetailView(DetailView):
     template_name = 'workshops/workshop-detail.html'
     context_object_name = 'workshop'
 
-class WorkshopCreateView(LoginRequiredMixin, CreateView):
+class WorkshopCreateView(LoginRequiredMixin, OrganizerRequiredMixin, CreateView):
     model = Workshop
     form_class = WorkshopCreateForm
-    template_name = 'workshops/workshop-create.html'
+    template_name = 'workshops/workshop-form.html'
     success_url = reverse_lazy('workshop-list')
 
     def form_valid(self, form):
         form.instance.organizer = self.request.user
         return super().form_valid(form)
 
-class WorkshopUpdateView(LoginRequiredMixin, UpdateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Create Workshop'
+        context['button_label'] = 'Create'
+        return context
+
+
+class WorkshopUpdateView(LoginRequiredMixin, OrganizerRequiredMixin, UpdateView):
     model = Workshop
     form_class = WorkshopEditForm
-    template_name = 'workshops/workshop-edit.html'
+    template_name = 'workshops/workshop-form.html'
 
     def get_success_url(self):
         return reverse_lazy('workshop-detail', kwargs={'pk': self.object.pk})
@@ -47,11 +55,25 @@ class WorkshopUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Workshop.objects.filter(organizer=self.request.user)
 
-class WorkshopDeleteView(LoginRequiredMixin, DeleteView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Edit Workshop'
+        context['button_label'] = 'Save Changes'
+        return context
+
+class WorkshopDeleteView(LoginRequiredMixin, OrganizerRequiredMixin, DeleteView):
     model = Workshop
     form_class = WorkshopDeleteForm
     template_name = 'workshops/workshop-delete.html'
     success_url = reverse_lazy('workshop-list')
+
+    def get_queryset(self):
+        return Workshop.objects.filter(organizer=self.request.user)
+
+class MyWorkshopListView(LoginRequiredMixin, OrganizerRequiredMixin, ListView):
+    model = Workshop
+    template_name = 'workshops/my-workshops.html'
+    context_object_name = 'workshops'
 
     def get_queryset(self):
         return Workshop.objects.filter(organizer=self.request.user)

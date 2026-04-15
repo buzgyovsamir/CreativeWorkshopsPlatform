@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">My Workshops</h2>
+
+{% if workshops %}
+    <div class="row">
+        {% for workshop in workshops %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5>{{ workshop.title }}</h5>
+                        <p>{{ workshop.city }}</p>
+                        <a href="{% url 'workshop-detail' workshop.pk %}" class="btn btn-primary">Details</a>
+                        <a href="{% url 'workshop-edit' workshop.pk %}" class="btn btn-warning">Edit</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You have not created any workshops yet.</p>
+{% endif %}
+{% endblock %}

@@ -5,7 +5,7 @@ from .views import (
     WorkshopDetailView,
     WorkshopCreateView,
     WorkshopUpdateView,
-    WorkshopDeleteView,
+    WorkshopDeleteView, MyWorkshopListView,
 )
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('<int:pk>/', WorkshopDetailView.as_view(), name='workshop-detail'),
     path('<int:pk>/edit/', WorkshopUpdateView.as_view(), name='workshop-edit'),
     path('<int:pk>/delete/', WorkshopDeleteView.as_view(), name='workshop-delete'),
+    path('my-workshops/', MyWorkshopListView.as_view(), name='my-workshops'),
 ]
