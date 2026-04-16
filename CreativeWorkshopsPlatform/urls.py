@@ -26,6 +26,7 @@ urlpatterns = [
     path('workshops/', include('workshops.urls')),
     path('bookings/', include('bookings.urls')),
     path('reviews/', include('reviews.urls')),
+    path('api/', include('api.urls')),
 ]
 
 if settings.DEBUG:
