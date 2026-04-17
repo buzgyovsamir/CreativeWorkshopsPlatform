@@ -11,6 +11,8 @@ from bookings.models import Booking
 from workshops.choices import WorkshopStatusChoices
 from workshops.models import Workshop
 
+from bookings.tasks import send_booking_confirmation_email
+
 class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
     form_class = BookingCreateForm
@@ -32,6 +34,11 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
                 self.workshop.status = WorkshopStatusChoices.FULL
 
             self.workshop.save()
+
+            send_booking_confirmation_email.delay(
+                self.request.user.email,
+                self.workshop.title,
+            )
 
             messages.success(self.request, 'Booking created successfully.')
             return response

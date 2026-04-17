@@ -1,3 +1,5 @@
+{% load custom_tags %}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="{% url 'home' %}">CraftNest</a>
@@ -28,9 +30,14 @@
                         </form>
                     </li>
 
+                    {% if request.user|is_organizer %}
                     <li class="nav-item">
-                       <a class="nav-link" href="{% url 'workshop-create' %}">Create</a>
+                        <a class="nav-link" href="{% url 'workshop-create' %}">Create</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my-workshops' %}">My Workshops</a>
+                    </li>
+                    {% endif %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'my-bookings' %}">My Bookings</a>
@@ -42,9 +49,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'review-list' %}">Reviews</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'my-workshops' %}">My Workshops</a>
-                    </li>
+
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Вход</a>
