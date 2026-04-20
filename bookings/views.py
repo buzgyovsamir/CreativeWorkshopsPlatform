@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -49,6 +50,14 @@ class BookingCreateView(LoginRequiredMixin, ParticipantRequiredMixin, CreateView
 
         except IntegrityError:
             form.add_error(None, 'You have already booked this workshop.')
+            return self.form_invalid(form)
+
+        except ValidationError as exc:
+            if any('already exists' in message for message in exc.messages):
+                form.add_error(None, 'You have already booked this workshop.')
+            else:
+                for message in exc.messages:
+                    form.add_error(None, message)
             return self.form_invalid(form)
 
         except Exception as exc:
