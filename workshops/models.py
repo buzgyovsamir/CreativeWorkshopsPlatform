@@ -95,6 +95,13 @@ class Workshop(models.Model):
         related_name='workshops',
     )
 
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='bookings.Booking',
+        related_name='booked_workshops',
+        blank=True,
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

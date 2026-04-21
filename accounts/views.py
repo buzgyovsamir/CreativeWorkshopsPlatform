@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -16,6 +17,9 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        participants_group = Group.objects.filter(name='Participants').first()
+        if participants_group:
+            self.object.groups.add(participants_group)
         login(self.request, self.object)
         return response
 
@@ -33,6 +37,9 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = AppUser
     template_name = 'accounts/profile-details.html'
     context_object_name = 'profile'
+
+    def get_queryset(self):
+        return AppUser.objects.filter(pk=self.request.user.pk)
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):

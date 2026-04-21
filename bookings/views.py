@@ -3,17 +3,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, FormView, TemplateView
+from django.views.generic import CreateView, ListView, FormView, TemplateView
 
 from bookings.choices import BookingStatusChoices
 from bookings.forms import BookingCreateForm, BookingCancelForm
 from bookings.models import Booking
+from core.mixins import ParticipantRequiredMixin
 from workshops.choices import WorkshopStatusChoices
 from workshops.models import Workshop
 
 from bookings.tasks import send_booking_confirmation_email
 
-class BookingCreateView(LoginRequiredMixin, CreateView):
+class BookingCreateView(LoginRequiredMixin, ParticipantRequiredMixin, CreateView):
     model = Booking
     form_class = BookingCreateForm
     template_name = 'bookings/booking-create.html'
@@ -35,10 +36,13 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
 
             self.workshop.save()
 
-            send_booking_confirmation_email.delay(
-                self.request.user.email,
-                self.workshop.title,
-            )
+            try:
+                send_booking_confirmation_email.delay(
+                    self.request.user.email,
+                    self.workshop.title,
+                )
+            except Exception:
+                messages.warning(self.request, 'Booking created, but confirmation email is temporarily unavailable.')
 
             messages.success(self.request, 'Booking created successfully.')
             return response
@@ -54,7 +58,7 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('my-bookings')
 
-class MyBookingsListView(LoginRequiredMixin, ListView):
+class MyBookingsListView(LoginRequiredMixin, ParticipantRequiredMixin, ListView):
     model = Booking
     template_name = 'bookings/my-bookings.html'
     context_object_name = 'bookings'
@@ -62,7 +66,7 @@ class MyBookingsListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Booking.objects.filter(participant=self.request.user).select_related('workshop')
 
-class BookingCancelView(LoginRequiredMixin, FormView):
+class BookingCancelView(LoginRequiredMixin, ParticipantRequiredMixin, FormView):
     form_class = BookingCancelForm
     template_name = 'bookings/booking-cancel.html'
     success_url = reverse_lazy('my-bookings')

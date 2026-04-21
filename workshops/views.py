@@ -3,7 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from bookings.choices import BookingStatusChoices
+from bookings.models import Booking
 from core.mixins import OrganizerRequiredMixin
+from reviews.models import Review
 from .forms import WorkshopCreateForm, WorkshopEditForm, WorkshopDeleteForm
 from .models import Workshop
 
@@ -26,6 +29,25 @@ class WorkshopDetailView(DetailView):
     model = Workshop
     template_name = 'workshops/workshop-detail.html'
     context_object_name = 'workshop'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        workshop = self.object
+
+        context['can_review'] = False
+        context['my_review'] = None
+
+        if user.is_authenticated and user != workshop.organizer:
+            has_confirmed_booking = Booking.objects.filter(
+                participant=user,
+                workshop=workshop,
+                status=BookingStatusChoices.CONFIRMED,
+            ).exists()
+            context['my_review'] = Review.objects.filter(author=user, workshop=workshop).first()
+            context['can_review'] = has_confirmed_booking and context['my_review'] is None
+
+        return context
 
 class WorkshopCreateView(LoginRequiredMixin, OrganizerRequiredMixin, CreateView):
     model = Workshop

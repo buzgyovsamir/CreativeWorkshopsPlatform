@@ -6,3 +6,8 @@ register = template.Library()
 @register.filter
 def is_organizer(user):
     return user.is_authenticated and user.groups.filter(name='Organizers').exists()
+
+
+@register.filter
+def is_participant(user):
+    return user.is_authenticated and user.groups.filter(name='Participants').exists()

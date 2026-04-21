@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Редакция на профил | CraftNest{% endblock %}
+{% block title %}Edit Profile | CraftNest{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h2 class="mb-4">Редакция на профил</h2>
+        <h2 class="mb-4">Edit Profile</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-success">Запази</button>
+            <button type="submit" class="btn btn-success">Save</button>
         </form>
     </div>
 </div>

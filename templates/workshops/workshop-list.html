@@ -3,6 +3,24 @@
 {% block content %}
 <h2 class="mb-4">Workshops</h2>
 
+<form method="get" class="row g-2 mb-4">
+    <div class="col-sm-8 col-md-4">
+        <input
+            type="text"
+            name="city"
+            class="form-control"
+            placeholder="Filter by city"
+            value="{{ request.GET.city }}"
+        >
+    </div>
+    <div class="col-sm-4 col-md-2">
+        <button type="submit" class="btn btn-outline-primary w-100">Apply</button>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'workshop-list' %}" class="btn btn-outline-secondary w-100">Clear</a>
+    </div>
+</form>
+
 <div class="row">
     {% for workshop in workshops %}
         <div class="col-md-4 mb-4">

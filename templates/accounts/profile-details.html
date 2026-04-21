@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Профил | CraftNest{% endblock %}
+{% block title %}Profile | CraftNest{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -8,11 +8,11 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <h2 class="card-title">{{ profile.username }}</h2>
-                <p><strong>Имейл:</strong> {{ profile.email }}</p>
-                <p><strong>Град:</strong> {{ profile.city|default:"Няма информация" }}</p>
-                <p><strong>Биография:</strong> {{ profile.bio|default:"Няма информация" }}</p>
+                <p><strong>Email:</strong> {{ profile.email }}</p>
+                <p><strong>City:</strong> {{ profile.city|default:"No information" }}</p>
+                <p><strong>Bio:</strong> {{ profile.bio|default:"No information" }}</p>
 
-                <a href="{% url 'profile-edit' profile.pk %}" class="btn btn-warning">Редактирай профила</a>
+                <a href="{% url 'profile-edit' profile.pk %}" class="btn btn-warning">Edit Profile</a>
             </div>
         </div>
     </div>

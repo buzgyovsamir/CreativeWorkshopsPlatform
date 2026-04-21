@@ -26,6 +26,13 @@
                 <button class="btn btn-secondary" disabled>Unavailable</button>
             {% endif %}
 
+            {% if can_review %}
+                <a href="{% url 'review-create' workshop.pk %}" class="btn btn-outline-primary">Write Review</a>
+            {% elif my_review %}
+                <a href="{% url 'review-edit' my_review.pk %}" class="btn btn-outline-warning">Edit Review</a>
+                <a href="{% url 'review-delete' my_review.pk %}" class="btn btn-outline-danger">Delete Review</a>
+            {% endif %}
+
         {% else %}
             <a href="{% url 'login' %}" class="btn btn-primary">Login to Book</a>
         {% endif %}

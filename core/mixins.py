@@ -13,6 +13,9 @@ class ParticipantRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.groups.filter(name='Participants').exists()
 
+    def handle_no_permission(self):
+        raise PermissionDenied
+
 
 class OwnerRequiredMixin(UserPassesTestMixin):
     owner_field = 'organizer'

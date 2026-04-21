@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
+from core.mixins import ParticipantRequiredMixin
 from reviews.forms import ReviewCreateForm, ReviewEditForm, ReviewDeleteForm
 from reviews.models import Review
 from workshops.models import Workshop
@@ -16,7 +17,7 @@ class ReviewListView(ListView):
     def get_queryset(self):
         return Review.objects.filter(is_visible=True).select_related('author', 'workshop')
 
-class ReviewCreateView(LoginRequiredMixin, CreateView):
+class ReviewCreateView(LoginRequiredMixin, ParticipantRequiredMixin, CreateView):
     model = Review
     form_class = ReviewCreateForm
     template_name = 'reviews/review-create.html'
@@ -34,7 +35,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('workshop-detail', kwargs={'pk': self.workshop.pk})
 
-class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+class ReviewUpdateView(LoginRequiredMixin, ParticipantRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewEditForm
     template_name = 'reviews/review-edit.html'
@@ -45,7 +46,7 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('workshop-detail', kwargs={'pk': self.object.workshop.pk})
 
-class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+class ReviewDeleteView(LoginRequiredMixin, ParticipantRequiredMixin, DeleteView):
     model = Review
     form_class = ReviewDeleteForm
     template_name = 'reviews/review-delete.html'
